@@ -4,6 +4,7 @@ class TasksController < ApplicationController
   
   def index
     @tasks = Task.all
+    @tasks = current_user.tasks.order(id: :desc).page(params[:page])
   end
 
   def show
@@ -14,12 +15,13 @@ class TasksController < ApplicationController
   end
 
   def create
-    @task = Task.new(task_params)
+    @task = current_user.tasks.build(task_params)
     
     if @task.save
       flash[:success] = 'Task が正常に追加されました'
       redirect_to @task
     else
+      @tasks = current_user.tasks.order(id: :desc).page(params[:page])
       flash.now[:danger] = 'Task が追加されませんでした'
       render :new
     end
@@ -52,6 +54,6 @@ class TasksController < ApplicationController
   end
   
   def task_params
-    params.require(:task).permit(:content, :status)
+    params.require(:task).permit(:content, :status, :user)
   end
 end

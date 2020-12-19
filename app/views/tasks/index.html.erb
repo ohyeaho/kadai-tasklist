@@ -8,3 +8,4 @@
 
 <%= link_to '新規タスクの追加', new_task_path %>
 <%= link_to 'Logout', logout_path, method: :delete %>
+<a href="<%= root_path(@current_user) %>" class="nav-link <%= 'active' if current_page?(root_path(@current_user)) %>"></a>
